@@ -1,0 +1,4 @@
+/*wizard width fix for forms*/
+.bsScope .fuelux .wizard > .steps{
+    width:inherit;
+}

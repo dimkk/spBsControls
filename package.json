@@ -1,0 +1,24 @@
+{
+  "name": "spBsControls",
+  "version": "0.0.1",
+  "description": "this is sharepoint form controls modifier ",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat-css": "^2.2.0",
+    "gulp-replace": "^0.5.3",
+    "gulp-rename": "^1.2.2",
+    "gulp-scope-css": "^0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sharepoint",
+    "bootstrap",
+    "fuelux"
+  ],
+  "author": "dimkk",
+  "license": "ISC"
+}

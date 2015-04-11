@@ -1,0 +1,24 @@
+{
+  "name": "spBsControls",
+  "version": "0.0.1",
+  "description": "this is control upgrader for sp forms",
+  "keywords": [
+    "sharepoint",
+    "bootstrap",
+    "fuelux"
+  ],
+  "authors": [
+    "dimkk"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fuelux": "~3.6.5"
+  }
+}
