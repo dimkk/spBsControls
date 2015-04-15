@@ -10,7 +10,10 @@
     "gulp-rename": "^1.2.2",
     "gulp-scope-css": "^0.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "bower-webpack-plugin": "^0.1.8",
+    "webpack": "^1.8.4"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
