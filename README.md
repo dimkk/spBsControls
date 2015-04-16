@@ -15,28 +15,5 @@
 <br/>
 
  5) Используя, например, Cisar (https://github.com/andrei-markeev/cisar) - создаем js для csr, или берем для примера из репо: './test.js'<br/>
- 6) Добавляем в OnPreRender: form:<br/>
- `var form = function(ctx){
- <br/>
- `spBsCtrls.formWrap(ctx);
- <br/>
- `}
- <br/>
- 7) Добавляем в OnPostRender:field  
- <br/>
-  'var field = function(ctx){
-  <br/>
-  'spBsCtrls.fieldWrap(ctx);
-  <br/>
-  '}
-  <br/>
- `
- <br/>
- 8) В поля подставляем picker:
-  <br/>
- `var picker = function(ctx){
-  <br/>
-`return spBsCtrls.picker(ctx);
- <br/>
-`}
- <br/>
+ 6) Играемся со всяким
+
