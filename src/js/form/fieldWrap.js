@@ -1,7 +1,8 @@
-(function(){//This will modify form table row styles to match BS Forms
+(function(){//This will modify form table row styles to match BS Forms put it in OnPostRender: of jslink
     var fw = function  (ctx){
 
         var f = ctx.ListSchema.Field[0];
+        console.log( f.FieldType);
         //We will not remove classes from people picker and customised controls
         var dontRemoveClass = f.FieldType === 'User' ||  f.FieldType === 'UserMulti'
             || spBsCtrls.optsWrap.customRenderedFields.indexOf(f.Name) != -1;
@@ -28,17 +29,17 @@
         $labelTdContents.wrapAll('<div class="form-group"></div>');
 
         //Once more
-        $labelTdContents
+        $labelTdContents //label
             .first()
             .children()
             .first()
             .unwrap()
-            .wrap('<label class="control-label col-xs-12 col-sm-12 col-md-4 col-lg-2"></label>');
-        $labelTdContents
+            .wrap('<label class="control-label col-xs-12 col-sm-2"></label>');
+        $labelTdContents //control
             .last()
             .children()
             .first()
-            .wrap('<div class="col-xs-12 col-sm-12 col-md-8 col-lg-10"></div>');
+            .wrap('<div class="col-xs-12 col-sm-10"></div>');
 
         //Add some BS styles to controls
         if (!dontRemoveClass) {

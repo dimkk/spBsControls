@@ -15,6 +15,7 @@ var runSequence = require('gulp-run-sequence');
 var concat = require('gulp-concat');
 var watch = require('gulp-watch');
 var del = require('gulp-rimraf');
+var bundle = require('gulp-bundle-assets');
 
 gulp.task('bsScope', function () {
     gulp.src(['./bower_components/bootstrap/dist/**/*.css', '!./bower_components/bootstrap/dist/**/*scoped*.css'])
@@ -92,6 +93,12 @@ gulp.task('watch', function () {
 gulp.task('clean', function () {
     return gulp.src(['C:\\Program Files\\Common Files\\microsoft shared\\Web Server Extensions\\15\\TEMPLATE\\LAYOUTS\\spBs', './dist/'], {read: false})
     pipe(del());
+})
+
+gulp.task('bundle', function () {
+    return gulp.src('./bundle.config.js')
+        .pipe(bundle())
+        .pipe(gulp.dest('./build'))
 })
 
 gulp.task('default', ['build', 'build']);
