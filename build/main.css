@@ -1,0 +1,23 @@
+/*wizard width fix for forms*/
+
+.bsScope .fuelux .wizard > .steps {
+  width: inherit;
+}
+
+/*.bsScope label{*/
+
+/*font-weight: normal !important;*/
+
+/*}*/
+
+.ms-formvalidation {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.pp-fix {
+  width: 100%;
+  border-radius: 4px;
+}
+/*# sourceMappingURL=maps/main.css.map */
