@@ -47,6 +47,11 @@
                 .attr('class', '')
                 .addClass('form-control');
 
+        } else{
+            $parentTr
+                .find('.sp-peoplepicker-topLevel')
+                .addClass('pp-fix');
+
         }
         $parentTr
             .find('select')
