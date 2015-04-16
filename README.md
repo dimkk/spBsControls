@@ -5,13 +5,13 @@
  3) Добавляем Script Editor Webpart<br/>
  4) Указываем путь до файлов (Например у меня в библиотеке стилей): <br/>
  <br/>
-`<link href='http://portal.jenewa.local/Style%20Library/build/vendor.css' media='screen' rel='stylesheet' type='text/css'/>
+`<link href='http://portal.jenewa.local/Style%20Library/build/vendor.css' media='screen' rel='stylesheet' type='text/css'/><script src='http://portal.jenewa.local/Style%20Library/build/vendor.js' type='text/javascript'></script>
 <br/>
-`<script src='http://portal.jenewa.local/Style%20Library/build/vendor.js' type='text/javascript'></script>
+`
 <br/>
-`<link href='http://portal.jenewa.local/Style%20Library/build/main.css' media='screen' rel='stylesheet' type='text/css'/>
+`<link href='http://portal.jenewa.local/Style%20Library/build/main.css' media='screen' rel='stylesheet' type='text/css'/><script src='http://portal.jenewa.local/Style%20Library/build/main.js' type='text/javascript'></script>
 <br/>
-`<script src='http://portal.jenewa.local/Style%20Library/build/main.js' type='text/javascript'></script>
+`
 <br/>
 
  5) Используя, например, Cisar (https://github.com/andrei-markeev/cisar) - создаем js для csr, или берем для примера из репо: './test.js'<br/>
