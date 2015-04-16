@@ -5,14 +5,15 @@
   "main": "gulpfile.js",
   "dependencies": {
     "gulp": "^3.8.11",
+    "gulp-bundle-assets": "^2.19.0",
+    "gulp-concat": "^2.5.2",
     "gulp-concat-css": "^2.2.0",
-    "gulp-replace": "^0.5.3",
     "gulp-rename": "^1.2.2",
-    "gulp-scope-css": "^0.0.2"
-  },
-  "devDependencies": {
-    "bower-webpack-plugin": "^0.1.8",
-    "webpack": "^1.8.4"
+    "gulp-replace": "^0.5.3",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-run-sequence": "^0.3.2",
+    "gulp-scope-css": "^0.0.2",
+    "gulp-watch": "^4.2.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,5 +24,6 @@
     "fuelux"
   ],
   "author": "dimkk",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": "https://github.com/dimkk/spBsControls"
 }
