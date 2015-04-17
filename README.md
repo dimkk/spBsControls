@@ -1,4 +1,12 @@
 # spBsControls 0.0.1
+## Библиотека изменяет стандартную форму листа SharePoint(2013 и 365) добавляя следующее:
+1. Twitter Bootstrap - работает только в контексте этой формы. Добавляет необходимые элементы в разметку и форма становится похожа на обычнуй форму бутстрап
+2. Может поменять некоторые контролы на более лучшие:
+ 1. Да/Нет - http://www.bootstrap-switch.org/
+ 2. Дата(без времени) - http://eonasdan.github.io/bootstrap-datetimepicker/
+ 3. Лукап, Мультилукап, Выбор, Мультивыбор - https://fk.github.io/select2-bootstrap-css/
+![alt tag](https://raw.githubusercontent.com/dimkk/spBsControls/master/show.png)
+
  использование:<br/>
  1) Кладем файлы из https://github.com/dimkk/spBsControls/tree/master/build куда-то в SharePoint2013 (365 не тестил)<br/>
  2) Заходим на листформу<br/>
