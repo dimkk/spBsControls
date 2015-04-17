@@ -16,4 +16,8 @@
 
  5) Используя, например, Cisar (https://github.com/andrei-markeev/cisar) - создаем js для csr, или берем для примера из репо: './test.js'<br/>
  6) Играемся со всяким
+ 
+ >ubn[f,
+ 
+ 
 
