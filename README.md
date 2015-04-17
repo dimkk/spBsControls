@@ -8,7 +8,7 @@
 ![alt tag](https://raw.githubusercontent.com/dimkk/spBsControls/master/show.png)
 
  использование:<br/>
- 1) Кладем файлы из https://github.com/dimkk/spBsControls/tree/master/build куда-то в SharePoint2013 (365 не тестил)<br/>
+ 1) Кладем файлы из https://github.com/dimkk/spBsControls/tree/master/build куда-то в SharePoint<br/>
  2) Заходим на листформу<br/>
  3) Добавляем Script Editor Webpart<br/>
  4) Указываем путь до файлов (Например у меня в библиотеке стилей): <br/>
