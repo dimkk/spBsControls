@@ -40,6 +40,6 @@ module.exports = {
     },
     copy:{
         src: './dist/vendor/fonts/**/*.*',
-        base: './dist/vendor'
+        base: './dist/'
     }
 };

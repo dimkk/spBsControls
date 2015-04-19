@@ -71,17 +71,17 @@ gulp.task('buildJs', function (cb) {
         .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('m', function () {
-    runSequence('buildCss', 'buildJs', 'buildJs', 'sp');
+gulp.task('m', ['buildCss', 'buildJs'], function () {
+    runSequence('sp');
 });
 
 gulp.task('build', function () {
-    runSequence('bsScope', 'xScope', 'move', 'buildCss', 'buildJs', 'sp');
+    runSequence('bsScope', 'xScope', 'move', 'buildCss', 'buildJs');
 });
 
 gulp.task('watch', function () {
     return watch(['./src/js/**/*.js', './src/style/**/*.css'], function () {
-        runSequence('m', 'm');
+        runSequence('m');
     });
 });
 
@@ -96,5 +96,7 @@ gulp.task('bundle', function () {
         .pipe(gulp.dest('./build'))
 })
 
-gulp.task('default', ['build', 'build']);
+gulp.task('default', ['clean'], function () {
+    runSequence('build', 'bundle');
+});
 
