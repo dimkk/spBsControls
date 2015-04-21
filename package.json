@@ -4,6 +4,7 @@
   "description": "this is sharepoint form controls modifier ",
   "main": "gulpfile.js",
   "dependencies": {
+    "del": "^1.1.1",
     "gulp": "^3.8.11",
     "gulp-bundle-assets": "^2.19.0",
     "gulp-concat": "^2.5.2",

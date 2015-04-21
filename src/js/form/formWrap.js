@@ -36,6 +36,11 @@
                 var $percent = ($current/$total) * 100;
                 $('#rootwizard .progress-bar').css({width:$percent+'%'});
             }});
+
+            if (spBsCtrls.common.ie() <= 9){
+                spBsCtrls.common.addScript('shiv', '/Style Library/spbs/html5shiv.js');
+                spBsCtrls.common.addScript('shim', '/Style Library/spbs/es5-shim.js');
+            }
         }
     };
 

@@ -9,14 +9,20 @@ var concatCss = require('gulp-concat-css');
 var runSequence = require('gulp-run-sequence');
 var concat = require('gulp-concat');
 var watch = require('gulp-watch');
-var del = require('gulp-rimraf');
+var del = require('del');
 var bundle = require('gulp-bundle-assets');
+var cfg = require('./gulp.config.js');
 
+/**
+ * Vendor section
+ */
 gulp.task('bsScope', function () {
-    gulp.src(['./bower_components/bootstrap/dist/**/*.css', '!./bower_components/bootstrap/dist/**/*scoped*.css'])
+    return gulp.src(['./bower_components/bootstrap/dist/**/*.css', '!./bower_components/bootstrap/dist/**/*scoped*.css'])
         .pipe(scopeCss('.bsScope'))
         .pipe(replace(' html', '.html-bs'))
         .pipe(replace(' body', '.body-bs'))
+        .pipe(replace('url(\'../fonts/', 'url(\'./fonts/'))
+        .pipe(replace('url(../fonts/', 'url(./fonts/'))
         .pipe(rename(function (path) {
             path.basename += '-scoped'
         }))
@@ -24,7 +30,7 @@ gulp.task('bsScope', function () {
 });
 
 gulp.task('xScope', function () {
-    gulp.src(['./bower_components/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css'])
+    return gulp.src(['./bower_components/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css'])
         .pipe(scopeCss('.bsScope'))
         .pipe(replace(' html', '.html-bs'))
         .pipe(replace(' body', '.body-bs'))
@@ -34,69 +40,75 @@ gulp.task('xScope', function () {
         .pipe(gulp.dest('./bower_components/x-editable/dist/bootstrap3-editable/css/'));
 });
 
-var vendorDist = [
-    './bower_components/jquery/dist/**/*.*',
-    './bower_components/bootstrap/dist/**/*.*',
-    './bower_components/select2/dist/**/*.*',
-    './bower_components/select2-bootstrap/_jekyll/css/select2-bootstrap.css',
-    './bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
-    './bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
-    './bower_components/moment/min/moment-with-locales.min.js',
-    './bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-    './bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-    './bower_components/lodash/lodash.min.js',
-    './bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js',
-    './bower_components/x-editable/dist/bootstrap3-editable/css/bootstrap-editable-scoped.css'
-];
+var vendorDist = cfg.vendorDist;
 
 gulp.task('move', function () {
-    gulp.src(vendorDist) //, {base: './'} to keep folder structure
-        .pipe(gulp.dest('./dist/vendor/'));
+    return gulp.src(vendorDist) //, {base: './'} to keep folder structure
+        .pipe(gulp.dest('./dist/vendor'));
 });
 
-gulp.task('sp',function () {
-    return gulp.src('./dist/**/*.*')
-        .pipe(gulp.dest('C:\\Program Files\\Common Files\\microsoft shared\\Web Server Extensions\\15\\TEMPLATE\\LAYOUTS\\spBs'));
+gulp.task('spVendor',function () {
+    return gulp.src(['./build/**/*.*', '!./build/**/*spBs*.*'])
+        .pipe(gulp.dest(cfg.sharePointMappedDrive));
+});
+
+gulp.task('build_vendor', ['bsScope', 'xScope'], function (cb) {
+    runSequence('move', cb);
+});
+
+/**
+ * Src section
+ */
+gulp.task('spSrc',function () {
+    return gulp.src(['./build/**/*spBs*.*'])
+        .pipe(gulp.dest(cfg.sharePointMappedDrive));
 });
 
 gulp.task('buildCss', function () {
-    gulp.src('./src/style/**/*.css')
+    return gulp.src('./src/style/**/*.css')
         .pipe(concatCss(''))
-        .pipe(gulp.dest('./dist/spBsCtrls.css'));
+        .pipe(gulp.dest('./build/spBsCtrls.css'));
 });
 
 gulp.task('buildJs', function (cb) {
     return gulp.src(['./src/js/ns.js', './src/js/**/*.js'])
         .pipe(concat('spBsCtrls.js'))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./build/'));
 });
 
-gulp.task('m', ['buildCss', 'buildJs'], function () {
-    runSequence('sp');
-});
 
-gulp.task('build', function () {
-    runSequence('bsScope', 'xScope', 'move', 'buildCss', 'buildJs');
+
+
+/**
+ * Common section
+ */
+
+gulp.task('legacy', function () {
+    return gulp.src('./legacy/*.*')
+        .pipe(gulp.dest('./build/'));
+})
+
+gulp.task('build', function (cb) {
+    runSequence('build_vendor', 'buildCss', 'buildJs', 'legacy', cb)
 });
 
 gulp.task('watch', function () {
     return watch(['./src/js/**/*.js', './src/style/**/*.css'], function () {
-        runSequence('m');
+        runSequence(['buildJs', 'buildCss'], 'spSrc');
     });
 });
 
-gulp.task('clean', function () {
-    return gulp.src(['C:\\Program Files\\Common Files\\microsoft shared\\Web Server Extensions\\15\\TEMPLATE\\LAYOUTS\\spBs', './dist/'], {read: false})
-    pipe(del());
-})
+gulp.task('clean', function (cb) {
+   return del(['./dist/', './build', cfg.sharePointMappedDrive], {force: true}, cb)
+});
 
 gulp.task('bundle', function () {
     return gulp.src('./bundle.config.js')
         .pipe(bundle())
         .pipe(gulp.dest('./build'))
-})
+});
 
-gulp.task('default', ['clean'], function () {
-    runSequence('build', 'bundle');
+gulp.task('default', function (cb) {
+    runSequence('clean', 'build', 'bundle', ['spSrc', 'spVendor'], cb);
 });
 

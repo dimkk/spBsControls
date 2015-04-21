@@ -7,11 +7,15 @@
         var choices = ctx.CurrentFieldSchema.Choices;
         var values = ctx.CurrentItem[f.Name].split(' ')[0]; //TODO checkout date_TIME_
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
+            var date = new Date(values);
+            if (!date.getTime()){
+                date = moment(values, 'DD.MM.YYYY');
+            }
             $('#'+controlId)
                 .datetimepicker({
                     format:'DD.MM.YYYY',
                     locale: 'ru',
-                    date: new Date(values)
+                    date: date
                 })
                 .on('dp.change', function (e) {
                     var data = $(e.target).val();
@@ -28,7 +32,7 @@
             SPFormControl_AppendValidationErrorMessage(controlId, errorResult);
         });
 
-        var text = '<div><input type="text" id="'+controlId+'" /></div>';
+        var text = '<div><input type="text" id="'+controlId+'" values="'+values+'" /></div>';
 
 
         return text;

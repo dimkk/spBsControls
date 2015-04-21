@@ -2,7 +2,7 @@
     var fw = function  (ctx){
 
         var f = ctx.ListSchema.Field[0];
-        console.log( f.FieldType);
+        //console.log( f.FieldType);
         //We will not remove classes from people picker and customised controls
         var dontRemoveClass = f.FieldType === 'User' ||  f.FieldType === 'UserMulti'
             || spBsCtrls.optsWrap.customRenderedFields.indexOf(f.Name) != -1;

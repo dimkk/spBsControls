@@ -1,17 +1,17 @@
 module.exports = {
     bundle: {
-        main: {
-            scripts: [
-                './dist/spBsCtrls.js'
-            ],
-            styles: './dist/spBsCtrls.css',
-            options: {
-                uglify: false, // don't minify js since bower already ships with one
-                minCSS: false, // don't minify css since bower already ships with one
-                rev: false,
-                fileName:'spBs'
-            }
-        },
+        //main: {
+        //    scripts: [
+        //        './dist/spBsCtrls.js'
+        //    ],
+        //    styles: './dist/spBsCtrls.css',
+        //    options: {
+        //        uglify: false, // don't minify js since bower already ships with one
+        //        minCSS: false, // don't minify css since bower already ships with one
+        //        rev: false,
+        //        fileName:'spBs'
+        //    }
+        //},
         vendor: {
             scripts: [
                 './dist/vendor/lodash.min.js',
@@ -23,7 +23,7 @@ module.exports = {
                 './dist/vendor/js/i18n/ru.js',
                 './dist/vendor/bootstrap-datetimepicker.min.js',
                 './dist/vendor/bootstrap-editable.min.js'
-                ],
+            ],
             styles:[
                 './dist/vendor/css/bootstrap.min-scoped.css',
                 './dist/vendor/bootstrap-editable-scoped.css',
@@ -33,13 +33,12 @@ module.exports = {
                 './dist/vendor/bootstrap-switch.min.css'
             ],
             options: {
-                rev: false,
-                fileName:'spBs_vendor'
+                rev: false
             }
         }
     },
     copy:{
-        src: './dist/vendor/fonts/**/*.*',
-        base: './dist/'
+        src: './dist/vendor/fonts/*.*',
+        base: './dist/vendor'
     }
 };

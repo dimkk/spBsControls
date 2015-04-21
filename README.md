@@ -12,18 +12,18 @@
  2. Заходим на листформу<br/>
  3. Добавляем Script Editor Webpart<br/>
  4. Указываем путь до файлов (Например у меня в библиотеке стилей): <br/>
- <br/>
-`<link href='http://portal.jenewa.local/Style%20Library/build/vendor.css' media='screen' rel='stylesheet' type='text/css'/><script src='http://portal.jenewa.local/Style%20Library/build/vendor.js' type='text/javascript'></script>
-`
-<br/>
-`<link href='http://portal.jenewa.local/Style%20Library/build/main.css' media='screen' rel='stylesheet' type='text/css'/><script src='http://portal.jenewa.local/Style%20Library/build/main.js' type='text/javascript'></script>
-`
-<br/>
+   <br/>
+  `<link href='http://portal.jenewa.local/Style%20Library/build/vendor.css' media='screen' rel='stylesheet' type='text/css'/><script src='http://portal.jenewa.local/Style%20Library/build/vendor.js' type='text/javascript'></script>
+  `
+  <br/>
+  `<link href='http://portal.jenewa.local/Style%20Library/build/main.css' media='screen' rel='stylesheet' type='text/css'/><script src='http://portal.jenewa.local/Style%20Library/build/main.js' type='text/javascript'></script>
+  `
+  <br/>
 
  5. Используя, например, Cisar (https://github.com/andrei-markeev/cisar) - создаем js для csr, или берем для примера из репо: https://github.com/dimkk/spBsControls/blob/master/test.js<br/>
- 6. Играемся со всяким
+ 6. Заходим в свойства веб-части отображения формы листа и указываем путь до JS файла, например - ~siteCollection/Style Library/test.js
 
- ### Протестировано на IE10, 11, Chrome 41
+### Протестировано на IE9, 11, Chrome 41
 
 ##Дорожная карта:
 1. Возможность использовать контролы без применения Bootstrap
@@ -33,10 +33,9 @@
 
 ##Для разработки
 1. Ставим node
-1. Git Clone (Я использую https://code.google.com/p/tortoisegit/)
+1. git clone https://github.com/dimkk/spBsControls.git (Я использую https://code.google.com/p/tortoisegit/)
 2. cmd - заходим в проект
 3. npm install
 4. bower install
-5. gulp build
-6. gulp bundle
-7. В папке билд появится свежий бандл
+5. gulp (соберет проект, не забудьте указать в gulp.config.js - путь до папки в SP)
+6. gulp watch - будет следить за изменениями
