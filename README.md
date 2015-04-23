@@ -5,7 +5,7 @@
  * Да/Нет - http://www.bootstrap-switch.org/
  * Дата(без времени) - http://eonasdan.github.io/bootstrap-datetimepicker/
  * Лукап, Мультилукап, Выбор, Мультивыбор - https://fk.github.io/select2-bootstrap-css/
- * Работает в IE8
+ * Работает в IE9
 ![alt tag](https://raw.githubusercontent.com/dimkk/spBsControls/master/show.png)
 
 ####Использование:<br/>
@@ -32,7 +32,7 @@
 ##Дорожная карта:
 1. Возможность использовать контролы без применения Bootstrap
 2. Возможность передавать параметры соответствующих опен сурс решений (Параметры смотреть в документации к соотв. решению)
-
+3. Поддержка IE8
 
 ##Для разработки
 1. Ставим node
