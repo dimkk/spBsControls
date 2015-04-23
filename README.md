@@ -12,11 +12,8 @@
   * Кладем файлы из https://github.com/dimkk/spBsControls/tree/master/build куда-то в SharePoint<br/>
   * Заходим на листформу<br/>
   * Добавляем Script Editor Webpart<br/>
-  * Указываем путь до файлов (Например у меня в библиотеке стилей, если нужна поддержка IE9 добавляем шим и шив): <br/>
+  * Указываем путь до файлов (Например у меня в библиотеке стилей): <br/>
   ```html
-  <!--[if lte IE 9]>
-                 <script src="/Style Library/spbs/es5-shim.min.js"></script>
-  <![endif]-->
   <link href='/Style%20Library/build/vendor.css' media='screen' rel='stylesheet' type='text/css'/>
   <script src='/Style%20Library/build/vendor.js' type='text/javascript'></script>
   <link href='/Style%20Library/build/spBsCtrls.css' media='screen' rel='stylesheet' type='text/css' />
