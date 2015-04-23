@@ -42,3 +42,6 @@
 4. bower install
 5. gulp (соберет проект, не забудьте указать в gulp.config.js - путь до папки в SP)
 6. gulp watch - будет следить за изменениями
+
+####Тут немного видео
+[![Видос](http://img.youtube.com/vi/LxGSRqxljWk/0.jpg)](http://www.youtube.com/watch?v=LxGSRqxljWk)
