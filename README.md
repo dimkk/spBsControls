@@ -12,7 +12,7 @@
   * Кладем файлы из https://github.com/dimkk/spBsControls/tree/master/build куда-то в SharePoint<br/>
   * Заходим на листформу<br/>
   * Добавляем Script Editor Webpart<br/>
-  * Указываем путь до файлов (Например у меня в библиотеке стилей, если нужна поддержка IE8 добавляем шим и шив): <br/>
+  * Указываем путь до файлов (Например у меня в библиотеке стилей, если нужна поддержка IE9 добавляем шим и шив): <br/>
   ```html
   <!--[if lte IE 9]>
                  <script src="/Style Library/spbs/es5-shim.js"></script>
@@ -27,7 +27,7 @@
   * Используя, например, Cisar (https://github.com/andrei-markeev/cisar) - создаем js для csr, или берем для примера из репо: https://github.com/dimkk/spBsControls/blob/master/test.js<br/>
   * Заходим в свойства веб-части отображения формы листа и указываем путь до JS файла, например - ~siteCollection/Style Library/test.js
 
-### Протестировано на IE8+, Chrome 41
+### Протестировано на IE9+, Chrome 41
 
 ##Дорожная карта:
 1. Возможность использовать контролы без применения Bootstrap
