@@ -29,6 +29,6 @@
         return text;
 
     };
-    $.extend(window.spBsCtrls, {switch: sw});
+    $.extend(window.spBsCtrls, {bsSwitch: sw});
 
 })();

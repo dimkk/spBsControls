@@ -1,4 +1,4 @@
-(function(){//This will pick the right control to render
+(function(){//Picker. This will pick the right control to render
     var pi = function (ctx) {
         var fieldType = ctx.ListSchema.Field[0].FieldType;
         switch(fieldType){
@@ -18,7 +18,7 @@
                 return spBsCtrls.choiceMulti(ctx);
                 break;
             case 'Boolean':
-                return spBsCtrls.switch(ctx);
+                return spBsCtrls.bsSwitch(ctx);
                 break;
             case 'Note':
                 return spBsCtrls.textarea(ctx);

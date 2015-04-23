@@ -15,8 +15,7 @@
   * Указываем путь до файлов (Например у меня в библиотеке стилей, если нужна поддержка IE9 добавляем шим и шив): <br/>
   ```html
   <!--[if lte IE 9]>
-                 <script src="/Style Library/spbs/es5-shim.js"></script>
-                 <script src="/Style Library/spbs/html5shiv.js"></script>
+                 <script src="/Style Library/spbs/es5-shim.min.js"></script>
   <![endif]-->
   <link href='/Style%20Library/build/vendor.css' media='screen' rel='stylesheet' type='text/css'/>
   <script src='/Style%20Library/build/vendor.js' type='text/javascript'></script>

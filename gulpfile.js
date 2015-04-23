@@ -84,7 +84,7 @@ gulp.task('buildJs', function (cb) {
  */
 
 gulp.task('legacy', function () {
-    return gulp.src('./legacy/*.*')
+    return gulp.src(cfg.legacyDist)
         .pipe(gulp.dest('./build/'));
 })
 

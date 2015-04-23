@@ -13,5 +13,12 @@ module.exports = {
         './bower_components/lodash/lodash.min.js',
         './bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js',
         './bower_components/x-editable/dist/bootstrap3-editable/css/bootstrap-editable-scoped.css'
+    ],
+    legacyDist:[
+        './bower_components/es5-shim/es5-shim.min.js',
+        './bower_components/es5-shim/es5-shim.map'
+        //'./bower_components/html5shiv/dist/html5shiv.min.js',
+        //'./bower_components/es5-shim/es5-sham.map',
+        //'./bower_components/es5-shim/es5-sham.min.js'
     ]
 };
