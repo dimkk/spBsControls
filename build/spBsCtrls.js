@@ -2,34 +2,67 @@
  * Created by sp-admin on 4/15/2015.
  */
 window.spBsCtrls = window.spBsCtrls || {};
-(function(){//This will modify form table row styles to match BS Forms
+(function(){//Common - this is common methods to support data flow for CSR
     var c = {
+        /**
+         * Return array of values from multi-choice field string CSR
+         * @param str
+         * @returns {Array}
+         */
         getChoicesArrayFromString: function (str) {
-            var result =str.split(';#');
-            result.pop();
-            result.shift();
-
-            return result;
+            if (str) {
+                var result = str.split(';#');
+                result.pop();
+                result.shift();
+                return result;
+            };
         },
+        /**
+         * Return string to save to CSR multichoice field
+         * @param arr
+         * @returns {string}
+         */
         getChoicesStringFromArray: function (arr) {
-            var result = arr.join(';#');
-                result = ';#' +  result + ';#';
-            return result;
+            if (arr && arr.length) {
+                var result = arr.join(';#');
+                result = ';#' + result + ';#';
+                return result;
+            }
         },
-      getLookupValuesFromIdsArray: function (arr) {
-          var result = _.map(arr, function(d){
-              return d + ';#';
-          })
-              .join(';#');
-          return result;
-      },
+        /**
+         * Return string to save to CSR lookup field
+         * @param arr
+         * @returns {string}
+         */
+        getLookupValuesFromIdsArray: function (arr) {
+            if (arr && arr.length) {
+                var result = _.map(arr, function (d) {
+                    return d + ';#';
+                })
+                    .join(';#');
+                return result;
+            }
+        },
+        /**
+         *  return array of ids from lookup field CSR value
+         * @param str
+         * @returns {Array|*}
+         */
         getLookupIdsFromString: function (str) {
-            var result = $.map(str.split(';#'),
-                function(item, idx){
-                    if (idx % 2 == 0){return item}
-                });
-            return result;
+            if (str) {
+                var result = $.map(str.split(';#'),
+                    function (item, idx) {
+                        if (idx % 2 == 0) {
+                            return item
+                        }
+                    });
+                return result;
+            };
         },
+        /**
+         * Determine version of IE
+         * @returns {*} version of IE or false
+         */
         ie:function(){
             var undef,
                 v = 3,
@@ -44,6 +77,11 @@ window.spBsCtrls = window.spBsCtrls || {};
             return v > 4 ? v : undef;
 
         },
+        /**
+         * Adds script with id to head, will not double add
+         * @param id
+         * @param src
+         */
         addScript: function (id, src) {
             if (!id || !src) return;
             if(!document.getElementById(id)) {
@@ -52,63 +90,118 @@ window.spBsCtrls = window.spBsCtrls || {};
                 script.src = src;
                 document.head.appendChild(script);
             }
+        },
+        /**
+         * adds style to head
+         * @param href
+         */
+        addStyle: function (href) {
+            var fileref = document.createElement("link");
+            fileref.setAttribute("rel", "stylesheet");
+            fileref.setAttribute("type", "text/css");
+            fileref.setAttribute("href", href);
         }
     };
     $.extend(window.spBsCtrls, {common: c});
 
 })();
+(function(){
+    var opts = {
+        customRenderedFields: [],
+        formWrapOptions:{ //Options for formWrapper
+            width:0.95, //Percent width
+            widthSelector:'#DeltaPlaceHolderMain', //Selector of element to get the width of form
+            formClass:'form-horizontal' //class for bs form
+        },
+        fieldWrapOptions:{
+            labelClasses:'col-xs-12 col-sm-2',
+            controlClasses:'col-xs-12 col-sm-10'
+        }
+    };
+    var ctrl = {
+        calendar:{
+            locale:'ru'
+        },
+        choice:{
+
+        },
+        choiceMulti:{
+            multiple:true
+        },
+        lookup:{
+
+        },
+        lookupMulti:{
+            multiple:true
+        },
+        boolean:{
+
+        }
+    };
+    $.extend(window.spBsCtrls, {
+        optsWrap: opts,
+        optsCtrl: ctrl
+    });
+})();
 (function(){//Picker. This will pick the right control to render
-    var pi = function (ctx) {
+    var pi = function (ctx, params) {
         var fieldType = ctx.ListSchema.Field[0].FieldType;
         switch(fieldType){
             case 'Lookup':
-                return spBsCtrls.lookup(ctx);
+                return spBsCtrls.lookup(ctx, params);
                 break;
             case 'LookupMulti':
-                return spBsCtrls.lookupMulti(ctx);
+                return spBsCtrls.lookupMulti(ctx, params);
                 break;
             case 'DateTime':
-                return spBsCtrls.calendar(ctx);
+                return spBsCtrls.calendar(ctx, params);
                 break;
             case 'Choice':
-                return spBsCtrls.choice(ctx);
+                return spBsCtrls.choice(ctx, params);
                 break;
             case 'MultiChoice':
-                return spBsCtrls.choiceMulti(ctx);
+                return spBsCtrls.choiceMulti(ctx, params);
                 break;
             case 'Boolean':
-                return spBsCtrls.bsSwitch(ctx);
+                return spBsCtrls.bsSwitch(ctx, params);
                 break;
-            case 'Note':
-                return spBsCtrls.textarea(ctx);
-                break;
+            //case 'Note':
+            //    return spBsCtrls.textarea(ctx);
+            //    break;
         }
     }
     $.extend(window.spBsCtrls, {picker: pi});
 
 })();
 (function(){//-------------------CALENDAR
-    var cal = function  (ctx){
+    var cal = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsCtrl.calendar);
         var f = ctx.ListSchema.Field[0];
-        //spBsCtrls.optsWrap.customRenderedFields.push(f.Name);
         var fieldInternalName = ctx.CurrentFieldSchema.Name;
         var controlId = f.Id;
         var choices = ctx.CurrentFieldSchema.Choices;
-        var values = ctx.CurrentItem[f.Name].split(' ')[0]; //TODO checkout date_TIME_
+        var values, date, format, affix = '';
+        if (f.DisplayFormat === 0){
+            values = ctx.CurrentItem[f.Name].split(' ')[0]; //Дата
+            format = 'DD.MM.YYYY';
+            affix = ' 0:0';
+        } else if (f.DisplayFormat === 1) {
+            values = ctx.CurrentItem[f.Name]; //Дата и время
+            format = 'DD.MM.YYYY hh:mm';
+        }
+        date = new Date(values);
+        if (!date.getTime()){
+            date = moment(values, format);
+        };
+
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
-            var date = new Date(values);
-            if (!date.getTime()){
-                date = moment(values, 'DD.MM.YYYY');
-            }
+            opts.date = date;
+            opts.format = opts.format || format;
             $('#'+controlId)
-                .datetimepicker({
-                    format:'DD.MM.YYYY',
-                    locale: 'ru',
-                    date: date
-                })
+                .datetimepicker(opts)
                 .on('dp.change', function (e) {
                     var data = $(e.target).val();
-                    ctx.FormContext.updateControlValue(f.Name, data + ' 0:0');
+                    ctx.FormContext.updateControlValue(f.Name, data + affix);
                 })
 
         });
@@ -131,7 +224,8 @@ window.spBsCtrls = window.spBsCtrls || {};
 
 })();
 (function(){
-    var ch = function  (ctx){
+    var ch = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsCtrl.choice);
         var f = ctx.ListSchema.Field[0];
         spBsCtrls.optsWrap.customRenderedFields.push(f.Name);
         var fieldInternalName = ctx.CurrentFieldSchema.Name;
@@ -139,11 +233,10 @@ window.spBsCtrls = window.spBsCtrls || {};
         var choices = ctx.CurrentFieldSchema.Choices;
         var values = spBsCtrls.common.getLookupIdsFromString(ctx.CurrentItem[f.Name]);
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
-            var normChoices = choices;//$.map(choices, function(choice){ return {text: choice.LookupValue, id:choice.LookupId}  });
+            var normChoices = choices;
+            opts.data = normChoices
             $('#'+controlId)
-                .select2({
-                    data: normChoices
-                })
+                .select2(opts)
                 .on('change', function (e) {
                     var data = $(e.target).val();
                     ctx.FormContext.updateControlValue(f.Name, data);
@@ -169,7 +262,8 @@ window.spBsCtrls = window.spBsCtrls || {};
 
 })();
 (function(){ //CHOICE MULTI
-    var cm = function  (ctx){
+    var cm = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsCtrl.choiceMulti);
         var f = ctx.ListSchema.Field[0];
         spBsCtrls.optsWrap.customRenderedFields.push(f.Name);
         var fieldInternalName = ctx.CurrentFieldSchema.Name;
@@ -177,12 +271,10 @@ window.spBsCtrls = window.spBsCtrls || {};
         var choices = ctx.CurrentFieldSchema.MultiChoices;
         var values = spBsCtrls.common.getChoicesArrayFromString(ctx.CurrentItem[f.Name]);
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
-            var normChoices = choices;//$.map(choices, function(choice){ return {text: choice.LookupValue, id:choice.LookupId}  });
+            var normChoices = choices;
+            opts.data = normChoices;
             $('#'+controlId)
-                .select2({
-                    data: normChoices,
-                    multiple: true
-                })
+                .select2(opts)
                 .on('change', function (e) {
                     var data = spBsCtrls.common.getChoicesStringFromArray($(e.target).val());
                     ctx.FormContext.updateControlValue(f.Name, data);
@@ -208,7 +300,8 @@ window.spBsCtrls = window.spBsCtrls || {};
 
 })();
 (function(){
-    var lu = function  (ctx){
+    var lu = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsCtrl.lookup);
         var f = ctx.ListSchema.Field[0];
         spBsCtrls.optsWrap.customRenderedFields.push(f.Name);
         var fieldInternalName = ctx.CurrentFieldSchema.Name;
@@ -217,10 +310,9 @@ window.spBsCtrls = window.spBsCtrls || {};
         var values = spBsCtrls.common.getLookupIdsFromString(ctx.CurrentItem[f.Name]);
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
             var normChoices = $.map(choices, function(choice){ return {text: choice.LookupValue, id:choice.LookupId}  });
+            opts.data = normChoices;
             $('#'+controlId)
-                .select2({
-                    data: normChoices
-                })
+                .select2(opts)
                 .on('change', function (e) {
                     var data = spBsCtrls.common.getLookupValuesFromIdsArray($(e.target).val());
                     ctx.FormContext.updateControlValue(f.Name, data);
@@ -246,7 +338,8 @@ window.spBsCtrls = window.spBsCtrls || {};
 
 })();
 (function(){
-    var lm = function  (ctx){
+    var lm = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsCtrl.lookupMulti);
         var f = ctx.ListSchema.Field[0];
         spBsCtrls.optsWrap.customRenderedFields.push(f.Name);
         var fieldInternalName = ctx.CurrentFieldSchema.Name;
@@ -255,11 +348,9 @@ window.spBsCtrls = window.spBsCtrls || {};
         var values = spBsCtrls.common.getLookupIdsFromString(ctx.CurrentItem[f.Name]);
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
             var normChoices = $.map(choices, function(choice){ return {text: choice.LookupValue, id:choice.LookupId}  });
+            opts.data = normChoices;
             $('#'+controlId)
-                .select2({
-                    data: normChoices,
-                    multiple: true
-                })
+                .select2(opts)
                 .on('change', function (e) {
                     var data = spBsCtrls.common.getLookupValuesFromIdsArray($(e.target).val());
                     ctx.FormContext.updateControlValue(f.Name, data);
@@ -285,19 +376,24 @@ window.spBsCtrls = window.spBsCtrls || {};
 
 })();
 (function(){ //-----------------------SWITCH
-    var sw = function  (ctx){
+    var sw = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsCtrl.boolean, $.fn.bootstrapSwitch.defaults);
         var f = ctx.ListSchema.Field[0];
         spBsCtrls.optsWrap.customRenderedFields.push(f.Name);
         var fieldInternalName = ctx.CurrentFieldSchema.Name;
         var controlId = f.Id;
         var values = ctx.CurrentItem[f.Name];
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
+            opts.state = values === "1" ? 'checked' : '';
             $('#'+controlId)
-                .attr('checked', values === "1")
-                .bootstrapSwitch()
+                .bootstrapSwitch(opts)
                 .on('switchChange.bootstrapSwitch', function (e, s) {
-                    var data = $(e.target).val();
-                    ctx.FormContext.updateControlValue(f.Name, data === 'on' ? "1" : "0");
+                    var data = $(e.target)
+                        //.closest('bootstrap-switch'
+                        .parent()
+                        .parent()
+                        .hasClass('bootstrap-switch-on'); //switch doesnot set checkecd attr on input - this is workaround
+                    ctx.FormContext.updateControlValue(f.Name, data ? "1" : "0");
                 });
         });
 
@@ -308,7 +404,6 @@ window.spBsCtrls = window.spBsCtrls || {};
         ctx.FormContext.registerValidationErrorCallback(fieldInternalName, function (errorResult) {
             SPFormControl_AppendValidationErrorMessage(controlId, errorResult);
         });
-
         var text = '<div><input type="checkbox" class="" id="'+controlId+'" /></div>';
 
 
@@ -356,9 +451,9 @@ window.spBsCtrls = window.spBsCtrls || {};
     $.extend(window.spBsCtrls, {textarea: ta});
 
 })();
-(function(){//This will modify form table row styles to match BS Forms put it in OnPostRender: of jslink
-    var fw = function  (ctx){
-
+(function(){//Field - This will modify form table row styles to match BS Forms put it in OnPostRender: of jslink
+    var fw = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsWrap.fieldWrapOptions);
         var f = ctx.ListSchema.Field[0];
         //console.log( f.FieldType);
         //We will not remove classes from people picker and customised controls
@@ -366,9 +461,12 @@ window.spBsCtrls = window.spBsCtrls || {};
             || spBsCtrls.optsWrap.customRenderedFields.indexOf(f.Name) != -1;
 
         //Lets find row
-        var $field = $('[id*="'+f.Id+'"]').first();
+        var $field = $('div#spBsCtrls').find('[id*="'+f.Id+'"]').first();
         var $parentTr = $field.parents('tr')
             .first();
+
+        //Remove width.. why its there?
+        //$parentTr.find('td[width]').removeAttr('width');
 
         //Cells
         var $controlTd = $parentTr.children()
@@ -392,12 +490,12 @@ window.spBsCtrls = window.spBsCtrls || {};
             .children()
             .first()
             .unwrap()
-            .wrap('<label class="control-label col-xs-12 col-sm-2"></label>');
+            .wrap('<label class="control-label '+opts.labelClasses+'"></label>');
         $labelTdContents //control
             .last()
             .children()
             .first()
-            .wrap('<div class="col-xs-12 col-sm-10"></div>');
+            .wrap('<div class="'+opts.controlClasses+'"></div>');
 
         //Add some BS styles to controls
         if (!dontRemoveClass) {
@@ -426,9 +524,9 @@ window.spBsCtrls = window.spBsCtrls || {};
 
 })();
 (function(){//FORM - This will wrap form table with elements and proper styles put it in OnPreRender: of jslink file
-    var bsForm = function (){
+    var bsForm = function (params){
         if (!spBsCtrls.optsWrap.bsWrapDone) { //This check is to run once
-
+            var opts = $.extend({}, params, spBsCtrls.optsWrap.formWrapOptions);
             //Lets find form table
             var $table = $('div[id*="WPQ2"]')
                 .first()
@@ -436,30 +534,26 @@ window.spBsCtrls = window.spBsCtrls || {};
                 .first();
 
             //Set width of form to whole screen - 5%
-            var width = $('#DeltaPlaceHolderMain').width();
-            $table.width(width * 0.95);
+            var width = $(opts.widthSelector).width();
+            $table.width(width * opts.width);
             spBsCtrls.optsWrap.bsWrapDone = true;
 
             //wrapping
             $table.wrap(
+                '<div id="spBsCtrls">' +
                 '<div class="bsScope">' +
                 '<div class="bsHtml">' +
-                '<div class="bsBody fuelux">' +
-                '<div class="form-horizontal">' +//'<div class="form-horizontal">' +
+                '<div class="bsBody">' +
+                '<div class="'+opts.formClass+'">' +
 
                 '</div>' +
                 '</div>' +
                 '</div>' +
-                '</div>');
-            //$table.append(strVar);
-            //$('.progress-bar-striped').addClass('active');
-            //$('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
-            //    var $total = navigation.find('li').length;
-            //    var $current = index+1;
-            //    var $percent = ($current/$total) * 100;
-            //    $('#rootwizard .progress-bar').css({width:$percent+'%'});
-            //}});
+                '</div>' +
+                '</div>'
+            );
 
+            //Someday
             //if (spBsCtrls.common.ie() <= 9){
             //    spBsCtrls.common.addScript('shiv', '/Style Library/spbs/html5shiv.js');
             //    spBsCtrls.common.addScript('shim', '/Style Library/spbs/es5-shim.js');
@@ -469,13 +563,6 @@ window.spBsCtrls = window.spBsCtrls || {};
 
 
     $.extend(window.spBsCtrls, {formWrap: bsForm});
-
-})();
-(function(){
-    var fw = {
-        customRenderedFields: []
-    };
-    $.extend(window.spBsCtrls, {optsWrap: fw});
 
 })();
 //var strVar="";

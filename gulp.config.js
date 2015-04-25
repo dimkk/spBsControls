@@ -1,5 +1,6 @@
 module.exports = {
-    sharePointMappedDrive: 'Y:\\SpBs',
+    sharePointTargetDir: 'Z:\\SpBs',
+    sharepointStyleLibrary: 'Z:\\',
     vendorDist:[
         './bower_components/jquery/dist/**/*.*',
         './bower_components/bootstrap/dist/**/*.*',

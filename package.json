@@ -1,6 +1,6 @@
 {
   "name": "spBsControls",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "this is sharepoint form controls modifier ",
   "main": "gulpfile.js",
   "dependencies": {

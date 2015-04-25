@@ -1,25 +1,32 @@
 (function(){//-------------------CALENDAR
-    var cal = function  (ctx){
+    var cal = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsCtrl.calendar);
         var f = ctx.ListSchema.Field[0];
-        //spBsCtrls.optsWrap.customRenderedFields.push(f.Name);
         var fieldInternalName = ctx.CurrentFieldSchema.Name;
         var controlId = f.Id;
         var choices = ctx.CurrentFieldSchema.Choices;
-        var values = ctx.CurrentItem[f.Name].split(' ')[0]; //TODO checkout date_TIME_
+        var values, date, format, affix = '';
+        if (f.DisplayFormat === 0){
+            values = ctx.CurrentItem[f.Name].split(' ')[0]; //Дата
+            format = 'DD.MM.YYYY';
+            affix = ' 0:0';
+        } else if (f.DisplayFormat === 1) {
+            values = ctx.CurrentItem[f.Name]; //Дата и время
+            format = 'DD.MM.YYYY hh:mm';
+        }
+        date = new Date(values);
+        if (!date.getTime()){
+            date = moment(values, format);
+        };
+
         ctx.FormContext.registerInitCallback(fieldInternalName, function () {
-            var date = new Date(values);
-            if (!date.getTime()){
-                date = moment(values, 'DD.MM.YYYY');
-            }
+            opts.date = date;
+            opts.format = opts.format || format;
             $('#'+controlId)
-                .datetimepicker({
-                    format:'DD.MM.YYYY',
-                    locale: 'ru',
-                    date: date
-                })
+                .datetimepicker(opts)
                 .on('dp.change', function (e) {
                     var data = $(e.target).val();
-                    ctx.FormContext.updateControlValue(f.Name, data + ' 0:0');
+                    ctx.FormContext.updateControlValue(f.Name, data + affix);
                 })
 
         });

@@ -1,6 +1,6 @@
-(function(){//This will modify form table row styles to match BS Forms put it in OnPostRender: of jslink
-    var fw = function  (ctx){
-
+(function(){//Field - This will modify form table row styles to match BS Forms put it in OnPostRender: of jslink
+    var fw = function  (ctx, params){
+        var opts = $.extend({}, params, spBsCtrls.optsWrap.fieldWrapOptions);
         var f = ctx.ListSchema.Field[0];
         //console.log( f.FieldType);
         //We will not remove classes from people picker and customised controls
@@ -8,9 +8,12 @@
             || spBsCtrls.optsWrap.customRenderedFields.indexOf(f.Name) != -1;
 
         //Lets find row
-        var $field = $('[id*="'+f.Id+'"]').first();
+        var $field = $('div#spBsCtrls').find('[id*="'+f.Id+'"]').first();
         var $parentTr = $field.parents('tr')
             .first();
+
+        //Remove width.. why its there?
+        //$parentTr.find('td[width]').removeAttr('width');
 
         //Cells
         var $controlTd = $parentTr.children()
@@ -34,12 +37,12 @@
             .children()
             .first()
             .unwrap()
-            .wrap('<label class="control-label col-xs-12 col-sm-2"></label>');
+            .wrap('<label class="control-label '+opts.labelClasses+'"></label>');
         $labelTdContents //control
             .last()
             .children()
             .first()
-            .wrap('<div class="col-xs-12 col-sm-10"></div>');
+            .wrap('<div class="'+opts.controlClasses+'"></div>');
 
         //Add some BS styles to controls
         if (!dontRemoveClass) {

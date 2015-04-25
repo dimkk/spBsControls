@@ -49,7 +49,7 @@ gulp.task('move', function () {
 
 gulp.task('spVendor',function () {
     return gulp.src(['./build/**/*.*', '!./build/**/*spBs*.*'])
-        .pipe(gulp.dest(cfg.sharePointMappedDrive));
+        .pipe(gulp.dest(cfg.sharePointTargetDir));
 });
 
 gulp.task('build_vendor', ['bsScope', 'xScope'], function (cb) {
@@ -61,7 +61,7 @@ gulp.task('build_vendor', ['bsScope', 'xScope'], function (cb) {
  */
 gulp.task('spSrc',function () {
     return gulp.src(['./build/**/*spBs*.*'])
-        .pipe(gulp.dest(cfg.sharePointMappedDrive));
+        .pipe(gulp.dest(cfg.sharePointTargetDir));
 });
 
 gulp.task('buildCss', function () {
@@ -77,29 +77,28 @@ gulp.task('buildJs', function (cb) {
 });
 
 
-
-
 /**
  * Common section
  */
 
-gulp.task('legacy', function () {
-    return gulp.src(cfg.legacyDist)
-        .pipe(gulp.dest('./build/'));
-})
+//Deprecated for now
+//gulp.task('legacy', function () {
+//    return gulp.src(cfg.legacyDist)
+//        .pipe(gulp.dest('./build/'));
+//});
 
 gulp.task('build', function (cb) {
-    runSequence('build_vendor', 'buildCss', 'buildJs', 'legacy', cb)
+    runSequence('build_vendor', 'buildCss', 'buildJs', cb) //'legacy'
 });
 
 gulp.task('watch', function () {
-    return watch(['./src/js/**/*.js', './src/style/**/*.css'], function () {
-        runSequence(['buildJs', 'buildCss'], 'spSrc');
+    return watch(['./src/js/**/*.js', './src/style/**/*.css', './test.js'], function () {
+        runSequence(['buildJs', 'buildCss'], 'spSrc', 'trans');
     });
 });
 
 gulp.task('clean', function (cb) {
-   return del(['./dist/', './build', cfg.sharePointMappedDrive], {force: true}, cb)
+   return del(['./dist/', './build', cfg.sharePointTargetDir], {force: true}, cb)
 });
 
 gulp.task('bundle', function () {
@@ -111,4 +110,12 @@ gulp.task('bundle', function () {
 gulp.task('default', function (cb) {
     runSequence('clean', 'build', 'bundle', ['spSrc', 'spVendor'], cb);
 });
+
+/*
+Transfer test.js to style library
+ */
+gulp.task('trans', function () {
+    return gulp.src(['./test.js'])
+        .pipe(gulp.dest(cfg.sharepointStyleLibrary));
+})
 
