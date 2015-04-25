@@ -10,15 +10,15 @@
 4. Можно передавать параметры соответствующих опен сурс решений (Параметры смотреть в документации к соотв. решению)
 
 ####Использование:<br/>
-  * Кладем файлы из https://github.com/dimkk/spBsControls/tree/master/build куда-то в SharePoint<br/>
+  * Кладем файлы из https://github.com/dimkk/spBsControls/tree/master/build куда-то в SharePoint (для примера в библиотеку стилей)<br/>
   * Заходим на листформу<br/>
   * Добавляем Script Editor Webpart
   * Указываем путь до файлов (Например у меня в библиотеке стилей): <br/>
   ```html
-  <link href='/Style%20Library/spBs/vendor.css' media='screen' rel='stylesheet' type='text/css'/>
-  <script src='/Style%20Library/spBs/vendor.js' type='text/javascript'></script>
-  <link href='/Style%20Library/spBs/spBsCtrls.css' media='screen' rel='stylesheet' type='text/css' />
-  <script src='/Style%20Library/spBs/spBsCtrls.js' type='text/javascript'></script>
+  <link href='/Style%20Library/build/vendor.css' media='screen' rel='stylesheet' type='text/css'/>
+  <script src='/Style%20Library/build/vendor.js' type='text/javascript'></script>
+  <link href='/Style%20Library/build/spBsCtrls.css' media='screen' rel='stylesheet' type='text/css' />
+  <script src='/Style%20Library/build/spBsCtrls.js' type='text/javascript'></script>
   ```
 
   * Используя, например, Cisar (https://github.com/andrei-markeev/cisar) - создаем js для csr, или берем для примера из репо: https://github.com/dimkk/spBsControls/blob/master/test.js<br/>
@@ -44,9 +44,9 @@
 2. cmd - заходим в проект
 3. npm install
 4. bower install
-5. gulp (соберет проект, не забудьте указать в gulp.config.js - путь до папки в SP)
+5. gulp (соберет проект, не забудьте указать в https://github.com/dimkk/spBsControls/blob/master/gulp.config.js - путь до папки в SP)
 6. gulp watch - будет следить за изменениями
-7. gulp trans - закинет 
+7. gulp trans - закинет test.js в папку указанную в настройках https://github.com/dimkk/spBsControls/blob/master/gulp.config.js
 
 ####Тут немного видео:
 [![Видос](http://img.youtube.com/vi/LxGSRqxljWk/0.jpg)](http://www.youtube.com/watch?v=LxGSRqxljWk)
