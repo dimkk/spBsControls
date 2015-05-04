@@ -10,7 +10,7 @@ SP.SOD.executeFunc("clienttemplates.js", "SPClientTemplates", function() {
     function init() {
 
         SPClientTemplates.TemplateManager.RegisterTemplateOverrides({
-
+            //form wrapper
             OnPreRender: form,
 
             Templates: {
@@ -52,7 +52,7 @@ SP.SOD.executeFunc("clienttemplates.js", "SPClientTemplates", function() {
                 }
 
             },
-
+            //field wrapper
             OnPostRender: field,
 
             ListTemplateType: 100
