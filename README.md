@@ -34,7 +34,7 @@ Lets say, we need to customise dropdown in select2 control for lookup field - we
  * Here is the result:
  ![alt tag](https://raw.githubusercontent.com/dimkk/spBsControls/master/select2-templating.png)
 
-##To develop
+##Contribute
 1. Install node
 1. git clone https://github.com/dimkk/spBsControls.git
 2. cmd - to project
